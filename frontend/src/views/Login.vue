@@ -53,10 +53,11 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
+import { useUserStore } from '../stores/user'
 
-const router = useRouter()
+const userStore = useUserStore()
 const formRef = ref<FormInstance>()
 const loading = ref(false)
 
@@ -77,10 +78,9 @@ async function handleLogin() {
 
   loading.value = true
   try {
-    // Placeholder：后续 Task 9 接入真实 API
-    localStorage.setItem('token', 'temp')
-    localStorage.setItem('username', form.username)
-    router.push('/')
+    await userStore.login(form.username, form.password)
+  } catch (e: any) {
+    ElMessage.error(e?.response?.data?.detail || '登录失败，请检查用户名和密码')
   } finally {
     loading.value = false
   }

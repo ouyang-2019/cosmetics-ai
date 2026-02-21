@@ -48,9 +48,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useUserStore } from '../stores/user'
 
 const router = useRouter()
 const route = useRoute()
+const userStore = useUserStore()
 
 const childRoutes = computed(() => {
   const mainRoute = router.getRoutes().find(r => r.path === '/')
@@ -62,13 +64,11 @@ const currentTitle = computed(() => {
 })
 
 const username = computed(() => {
-  return localStorage.getItem('username') ?? '用户'
+  return userStore.username || '用户'
 })
 
 function handleLogout() {
-  localStorage.removeItem('token')
-  localStorage.removeItem('username')
-  router.push('/login')
+  userStore.logout()
 }
 </script>
 
