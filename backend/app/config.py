@@ -27,12 +27,19 @@ class Settings(BaseSettings):
     llm_model: str = "gpt-4"
 
     # RAGFlow
-    ragflow_url: str = ""
+    ragflow_url: str = "http://192.168.1.100:9380"
     ragflow_api_key: str = ""
 
     # Dify
-    dify_url: str = ""
+    dify_url: str = "https://api.dify.ai"
     dify_api_key: str = ""
+
+    # Dify Workflow Keys
+    dify_wf_regulation_search_key: str = ""
+    dify_wf_doc_review_key: str = ""
+    dify_wf_copy_review_key: str = ""
+    dify_wf_copy_generate_key: str = ""
+    dify_chat_app_key: str = ""
 
     # MinIO
     minio_endpoint: str = "minio:9000"
