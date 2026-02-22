@@ -127,7 +127,7 @@ import { ElMessage } from 'element-plus'
 import MarkdownIt from 'markdown-it'
 import { runWorkflow } from '@/api/workflow'
 
-const md = new MarkdownIt()
+const md = new MarkdownIt({ html: false })
 
 const mode = ref<'review' | 'generate'>('review')
 const productType = ref('护肤品')
@@ -206,9 +206,10 @@ async function handleProcess() {
 }
 
 function handleCopy() {
-  navigator.clipboard.writeText(resultText.value).then(() => {
-    ElMessage.success('已复制到剪贴板')
-  })
+  navigator.clipboard.writeText(resultText.value).then(
+    () => ElMessage.success('已复制到剪贴板'),
+    () => ElMessage.warning('复制失败，请手动复制'),
+  )
 }
 
 function handleExport() {

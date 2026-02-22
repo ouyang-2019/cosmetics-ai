@@ -39,6 +39,7 @@ class Settings(BaseSettings):
     dify_wf_doc_review_key: str = ""
     dify_wf_copy_review_key: str = ""
     dify_wf_copy_generate_key: str = ""
+    dify_wf_doc_generate_key: str = ""
     dify_chat_app_key: str = ""
 
     # MinIO
@@ -48,6 +49,9 @@ class Settings(BaseSettings):
     minio_bucket: str = "cosmetics-ai"
     minio_secure: bool = False
 
+    # CORS
+    cors_origins: str = ""  # 逗号分隔，空则允许所有来源
+
     @computed_field
     @property
     def database_url(self) -> str:
@@ -56,7 +60,7 @@ class Settings(BaseSettings):
             f"@{self.mysql_host}:{self.mysql_port}/{self.mysql_database}"
         )
 
-    model_config = {"env_file": ".env"}
+    model_config = {"env_file": ".env", "extra": "ignore"}
 
 
 settings = Settings()

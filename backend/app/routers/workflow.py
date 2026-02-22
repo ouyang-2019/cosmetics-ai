@@ -13,6 +13,7 @@ def _get_workflow_key(workflow_key: str) -> str | None:
     mapping = {
         "regulation_search": settings.dify_wf_regulation_search_key,
         "doc_review": settings.dify_wf_doc_review_key,
+        "doc_generate": settings.dify_wf_doc_generate_key,
         "copy_review": settings.dify_wf_copy_review_key,
         "copy_generate": settings.dify_wf_copy_generate_key,
     }
@@ -74,7 +75,7 @@ async def chat(
         return ChatResponse(
             answer=result.get("answer", ""),
             conversation_id=result.get("conversation_id", ""),
-            sources=result.get("retriever_resources", []),
+            sources=result.get("metadata", {}).get("retriever_resources", result.get("retriever_resources", [])),
         )
     except Exception as e:
         raise HTTPException(

@@ -224,9 +224,10 @@ function loadFromStorage() {
   const raw = localStorage.getItem(STORAGE_KEY)
   if (raw) {
     try {
-      conversations.value = JSON.parse(raw)
-      if (conversations.value.length > 0) {
-        activeConversationId.value = conversations.value[0].id
+      const parsed = JSON.parse(raw) as Conversation[]
+      conversations.value = parsed
+      if (parsed.length > 0 && parsed[0]) {
+        activeConversationId.value = parsed[0].id
       }
     } catch {
       conversations.value = []

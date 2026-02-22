@@ -255,7 +255,7 @@ async function handleSearch() {
       inputs: { question: q },
     })
 
-    const outputs = response?.data?.outputs ?? response?.outputs ?? response?.data ?? {}
+    const outputs = response?.outputs ?? {}
     result.value = extractAnswer(outputs)
     sources.value = extractSources(outputs)
 

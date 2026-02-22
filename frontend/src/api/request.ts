@@ -1,13 +1,14 @@
 import axios from 'axios'
+import type { AxiosInstance, AxiosRequestConfig } from 'axios'
 import { ElMessage } from 'element-plus'
 import router from '../router'
 
-const request = axios.create({
+const instance: AxiosInstance = axios.create({
   baseURL: '/api',
   timeout: 120000,
 })
 
-request.interceptors.request.use((config) => {
+instance.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
@@ -15,7 +16,7 @@ request.interceptors.request.use((config) => {
   return config
 })
 
-request.interceptors.response.use(
+instance.interceptors.response.use(
   (response) => response.data,
   (error) => {
     const status = error.response?.status
@@ -31,5 +32,21 @@ request.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+/** 对 axios 实例进行包装，使返回类型反映 interceptor 解包后的实际数据类型 */
+const request = {
+  get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return instance.get(url, config) as unknown as Promise<T>
+  },
+  post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+    return instance.post(url, data, config) as unknown as Promise<T>
+  },
+  put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+    return instance.put(url, data, config) as unknown as Promise<T>
+  },
+  delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return instance.delete(url, config) as unknown as Promise<T>
+  },
+}
 
 export default request

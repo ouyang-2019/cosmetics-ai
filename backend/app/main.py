@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.config import settings
 from app.routers import auth, knowledge, workflow
 
 app = FastAPI(
@@ -9,10 +10,12 @@ app = FastAPI(
     version="0.1.0",
 )
 
+# CORS 配置：生产环境应通过 CORS_ORIGINS 环境变量限制来源
+_origins = settings.cors_origins.split(",") if settings.cors_origins else ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=_origins,
+    allow_credentials=bool(settings.cors_origins),
     allow_methods=["*"],
     allow_headers=["*"],
 )
